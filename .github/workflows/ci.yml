@@ -29,7 +29,7 @@ jobs:
       - name: Install system packages
         run: |
           sudo apt-get update
-          sudo apt-get install -y graphviz libgraphviz-dev texlive-latex-extra latexmk ruby-full
+          sudo apt-get install -y graphviz libgraphviz-dev texlive-latex-extra latexmk ruby-full ruby-bundler
 
       - name: Install UV
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
