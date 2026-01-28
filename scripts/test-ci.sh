@@ -18,16 +18,12 @@ cp -r blueprint/web/* home_page/blueprint/
 [ -f blueprint/print/print.pdf ] && cp blueprint/print/print.pdf home_page/blueprint.pdf || true
 
 echo ""
-echo "=== Step 4: Build Jekyll site ==="
-cd home_page
-bundle install
-JEKYLL_ENV=production bundle exec jekyll build
-cd ..
-
-echo ""
 echo "=== Done! ==="
-echo "Site built at: home_page/_site/"
 echo ""
-echo "To serve locally:"
-echo "  cd home_page && bundle exec jekyll serve"
-echo "  Then visit http://localhost:4000"
+echo "Blueprint available at: home_page/blueprint/index.html"
+echo ""
+echo "To view locally:"
+echo "  open home_page/blueprint/index.html"
+echo ""
+echo "Note: Jekyll build skipped locally (requires older Ruby)."
+echo "      CI will build the full Jekyll site."
