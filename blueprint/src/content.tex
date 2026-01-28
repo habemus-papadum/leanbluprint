@@ -5,3 +5,55 @@
 % If you want to split the blueprint content into several files then
 % the current file can be a simple sequence of \input. Otherwise It
 % can start with a \section or \chapter for instance.
+
+\chapter{Sum Formulas}
+
+This chapter contains classical summation formulas that serve as a demonstration
+of the Lean Blueprint workflow.
+
+\section{Sum of Natural Numbers}
+
+\begin{theorem}[Sum of Natural Numbers]
+  \label{thm:sum_naturals}
+  \lean{BluePrintDemo.sum_naturals}
+  \leanok
+  For all $n \in \mathbb{N}$:
+  \[
+    \sum_{i=0}^{n} i = \frac{n(n+1)}{2}
+  \]
+\end{theorem}
+
+\begin{proof}
+  By induction on $n$. The base case $n = 0$ is trivial since both sides equal $0$.
+  For the inductive step, assuming the formula holds for $n$, we have:
+  \[
+    \sum_{i=0}^{n+1} i = \sum_{i=0}^{n} i + (n+1) = \frac{n(n+1)}{2} + (n+1) = \frac{(n+1)(n+2)}{2}
+  \]
+  which is the formula for $n+1$.
+\end{proof}
+
+\section{Sum of Squares}
+
+\begin{theorem}[Sum of Squares]
+  \label{thm:sum_squares}
+  \lean{BluePrintDemo.sum_squares}
+  \leanok
+  \uses{thm:sum_naturals}
+  For all $n \in \mathbb{N}$:
+  \[
+    \sum_{i=0}^{n} i^2 = \frac{n(n+1)(2n+1)}{6}
+  \]
+\end{theorem}
+
+\begin{proof}
+  By induction on $n$. The base case $n = 0$ is trivial.
+  For the inductive step, assuming the formula holds for $n$:
+  \[
+    \sum_{i=0}^{n+1} i^2 = \sum_{i=0}^{n} i^2 + (n+1)^2 = \frac{n(n+1)(2n+1)}{6} + (n+1)^2
+  \]
+  Simplifying:
+  \[
+    = \frac{n(n+1)(2n+1) + 6(n+1)^2}{6} = \frac{(n+1)(2n^2 + n + 6n + 6)}{6} = \frac{(n+1)(n+2)(2n+3)}{6}
+  \]
+  which is the formula for $n+1$.
+\end{proof}

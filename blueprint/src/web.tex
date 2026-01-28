@@ -11,8 +11,13 @@
 \usepackage[showmore, dep_graph]{blueprint}
 
 
-\input{macros/common}
-\input{macros/web}
+% Inline macros (replacing \input{macros/common} and \input{macros/web})
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
 
 \home{https://habemus-papadum.github.io/leanbluprint}
 \github{https://github.com/habemus-papadum/leanbluprint}
