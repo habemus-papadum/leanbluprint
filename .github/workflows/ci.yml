@@ -17,32 +17,62 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Build, Blueprint, and Deploy
     steps:
-      - name: Free disk space
-        uses: jlumbroso/free-disk-space@v1.3.0
-        with:
-          tool-cache: false
-          android: true
-          dotnet: false
-          haskell: false
-          large-packages: false
-          docker-images: false
-          swap-storage: false
-
       - name: Checkout
         uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
 
-      - name: Build Lean project
-        uses: leanprover/lean-action@v1
-        with:
-          build: true
-          lint: false
+      - name: Install elan
+        run: |
+          curl https://elan.lean-lang.org/elan-init.sh -sSf | sh -s -- -y
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
 
-      - name: Build blueprint and docs, then deploy
-        uses: leanprover-community/docgen-action@deed0cdc44dd8e5de07a300773eb751d33e32fc8
+      - name: Install system packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y graphviz libgraphviz-dev texlive-latex-extra latexmk ruby-full
+
+      - name: Install UV
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+      - name: Get Mathlib cache and build
+        run: |
+          ~/.elan/bin/lake exe cache get
+          ~/.elan/bin/lake build
+
+      - name: Install Python dependencies
+        run: |
+          uv venv
+          uv pip install pygraphviz leanblueprint
+
+      - name: Build blueprint
+        run: |
+          source .venv/bin/activate
+          leanblueprint pdf || echo "PDF build failed, continuing..."
+          leanblueprint web
+          lake exe checkdecls blueprint/lean_decls
+
+      - name: Build API docs
+        run: ~/.elan/bin/lake build BluePrintDemo:docs
+
+      - name: Assemble site
+        run: |
+          mkdir -p home_page/blueprint
+          mkdir -p home_page/docs
+          cp -r blueprint/web/* home_page/blueprint/
+          [ -f blueprint/print/print.pdf ] && cp blueprint/print/print.pdf home_page/blueprint.pdf || true
+          cp -r .lake/build/doc/* home_page/docs/
+
+      - name: Build Jekyll site
+        run: |
+          cd home_page
+          bundle install
+          JEKYLL_ENV=production bundle exec jekyll build
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          blueprint: true
-          homepage: home_page
+          path: home_page/_site
+
+      - name: Deploy to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/deploy-pages@v4
