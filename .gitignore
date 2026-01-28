@@ -4,4 +4,5 @@
 /home_page/docs
 /home_page/blueprint
 /home_page/blueprint.pdf
-
+.DS_Store
+*.olean

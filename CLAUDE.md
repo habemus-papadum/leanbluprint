@@ -4,10 +4,10 @@ This is a Lean 4 project demonstrating how to use Lean Blueprint for documenting
 
 ## Lean Setup
 
-- **Lean version**: 4.27.0 (see `lean-toolchain`)
+- **Lean version**: 4.27.0-rc1 (see `lean-toolchain`)
 - **Build system**: Lake
 - **Project name**: BluePrintDemo
-- **Dependencies**: Mathlib v4.27.0
+- **Dependencies**: Mathlib (latest), checkdecls
 
 ### Project Structure
 
@@ -17,32 +17,27 @@ BluePrintDemo/
   Basic.lean             # Core definitions and theorems
 lakefile.toml            # Lake build configuration
 lean-toolchain           # Lean version specification
+blueprint/               # LaTeX blueprint source
+home_page/               # Jekyll site for GitHub Pages
 ```
 
 ### Building the Project
 
 ```bash
+lake update
+lake exe cache get   # Fetch Mathlib cache
 lake build
 ```
 
-## Python Environment (for Lean Blueprint)
+## CI / Documentation
 
-Use **UV** for managing Python packages:
-
-```bash
-# Install leanblueprint
-uv pip install leanblueprint
-
-# Or add to a project with uv
-uv add leanblueprint
-```
+CI uses `leanprover/lean-action@v1` to build Lean and `leanprover-community/docgen-action@main` to compile the blueprint, doc-gen4 docs, and Jekyll homepage. No local Python/UV setup is needed — docgen-action handles leanblueprint internally.
 
 ## Lean Blueprint
 
-Lean Blueprint is used to create mathematical documentation that tracks formalization progress. Key commands:
+Lean Blueprint is used to create mathematical documentation that tracks formalization progress. Key commands (if running locally):
 
 ```bash
-leanblueprint new        # Initialize blueprint in project
 leanblueprint web        # Build HTML documentation
 leanblueprint pdf        # Build PDF documentation
 leanblueprint checkdecls # Verify Lean declarations exist
