@@ -51,16 +51,11 @@ jobs:
           leanblueprint web
           lake exe checkdecls blueprint/lean_decls
 
-      - name: Build API docs
-        run: ~/.elan/bin/lake build BluePrintDemo:docs
-
       - name: Assemble site
         run: |
           mkdir -p home_page/blueprint
-          mkdir -p home_page/docs
           cp -r blueprint/web/* home_page/blueprint/
           [ -f blueprint/print/print.pdf ] && cp blueprint/print/print.pdf home_page/blueprint.pdf || true
-          cp -r .lake/build/doc/* home_page/docs/
 
       - name: Build Jekyll site
         run: |
