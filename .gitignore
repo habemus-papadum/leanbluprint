@@ -4,5 +4,7 @@
 /home_page/docs
 /home_page/blueprint
 /home_page/blueprint.pdf
+/home_page/vendor
+/home_page/.bundle
 .DS_Store
 *.olean
